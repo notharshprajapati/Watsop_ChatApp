@@ -3,21 +3,20 @@ import {
   collection,
   query,
   where,
-  doc,
   getDocs,
   setDoc,
+  doc,
   updateDoc,
   serverTimestamp,
   getDoc,
 } from "firebase/firestore";
-
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
-
 const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
+
   const { currentUser } = useContext(AuthContext);
 
   const handleSearch = async () => {
