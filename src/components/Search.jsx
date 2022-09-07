@@ -41,16 +41,16 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
-    //check whether the chat with user exists and if not make it
+    //check whether the group(chats in firestore) exists, if not create
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
-        : user.uid + currentUser.id;
-
+        : user.uid + currentUser.uid;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
+
       if (!res.exists()) {
-        //create a new chat
+        //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         //create user chats
@@ -74,21 +74,23 @@ const Search = () => {
       }
     } catch (err) {}
 
-    //create user chats
+    setUser(null);
+    setUsername("");
   };
   return (
     <div className="search">
       <div className="searchForm">
         <input
           type="text"
-          placeholder="Find User"
+          placeholder="Find a user"
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
+          value={username}
         />
       </div>
-      {err && <span>Something went wrong</span>}
+      {err && <span>User not found!</span>}
       {user && (
-        <div className="userChat">
+        <div className="userChat" onClick={handleSelect}>
           <img src={user.photoURL} alt="" />
           <div className="userChatInfo">
             <span>{user.displayName}</span>
